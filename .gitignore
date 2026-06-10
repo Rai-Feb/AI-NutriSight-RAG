@@ -1,0 +1,55 @@
+# Secrets & Environment
+.streamlit/secrets.toml
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints
+
+# Dev Container (optional - kecuali Anda ingin share config)
+.devcontainer/
+
+# Model files yang besar (optional - jika file .pkl > 100MB)
+# models/*.pkl
+
+# Dataset besar (optional - jika dataset > 50MB)
+# Datasets/*.csv
