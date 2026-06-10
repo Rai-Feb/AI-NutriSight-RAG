@@ -41,17 +41,24 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # Header dengan Logo
-col_logo, col_title = st.columns([0.1, 0.9])
+col_logo, col_title = st.columns([1, 8])
+
 with col_logo:
     if os.path.exists("Nutrisight.png"):
-        st.image("Nutrisight.png", width=60)
-with col_title:
-    st.title("NutriSight")
-    st.markdown(
-        "Chatbot Intervensi Gizi Berbasis RAG dengan Sistem Hibrida Machine Learning untuk Klasifikasi Risiko Stunting"
-    )
+        st.image("Nutrisight.png", width=80)
 
-st.markdown("---")
+with col_title:
+    st.markdown(
+        """
+        <div style="display:flex; flex-direction:column; justify-content:center; height:80px;">
+            <h1 style="margin:0;">NutriSight</h1>
+            <p style="margin:0;">
+                Chatbot Intervensi Gizi Berbasis RAG dengan Sistem Hibrida Machine Learning untuk Klasifikasi Risiko Stunting
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 with st.sidebar:
     st.header("Informasi Sistem")
@@ -150,7 +157,8 @@ with col2:
                 st.markdown(
                     f"""
                     <div style="
-                        background-color: #1E3A5F;
+                        background-color: #2563EB;
+                        color: white;
                         padding: 12px 16px;
                         border-radius: 12px;
                         margin: 10px 0;
@@ -167,6 +175,7 @@ with col2:
                     f"""
                     <div style="
                         background-color: #262730;
+                        color: white;
                         padding: 12px 16px;
                         border-radius: 12px;
                         margin: 10px 0;
