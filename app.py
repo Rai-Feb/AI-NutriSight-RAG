@@ -41,18 +41,18 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # Header dengan Logo
-col_logo, col_title = st.columns([1, 8])
+col_logo, col_title = st.columns([0.35, 5])
 
 with col_logo:
     if os.path.exists("Nutrisight.png"):
-        st.image("Nutrisight.png", width=80)
+        st.image("Nutrisight.png", width=85)
 
 with col_title:
     st.markdown(
         """
-        <div style="display:flex; flex-direction:column; justify-content:center; height:80px;">
-            <h1 style="margin:0;">NutriSight</h1>
-            <p style="margin:0;">
+        <div style="padding-top:8px;">
+            <h1 style="margin-bottom:0;">NutriSight</h1>
+            <p style="margin-top:0;">
                 Chatbot Intervensi Gizi Berbasis RAG dengan Sistem Hibrida Machine Learning untuk Klasifikasi Risiko Stunting
             </p>
         </div>
