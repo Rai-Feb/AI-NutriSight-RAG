@@ -48,7 +48,7 @@ def predict_stunting(age_months, weight_kg, height_cm, gender):
                 "message": f"Jenis kelamin '{gender}' tidak valid. Gunakan 'Laki-laki' atau 'Perempuan'.",
             }
 
-        # 4. Feature Engineering (menyesuaikan colab)
+        # Feature Engineering (menyesuaikan colab)
         who_median_height = 50 + age_months * 0.7
         who_sd_height = 3.0 + age_months * 0.03
 

@@ -1,5 +1,10 @@
 import streamlit as st
 import os
+import sys
+
+# Tambahkan root directory ke Python path agar import module bekerja di Streamlit Cloud
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from models.ml_predict import predict_stunting
 from rag import (
     get_ai_response,
@@ -141,7 +146,7 @@ with col2:
     with chat_container:
         for i, message in enumerate(st.session_state.messages):
             if message["role"] == "user":
-                # User message 
+                # User message
                 st.markdown(
                     f"""
                     <div style="
