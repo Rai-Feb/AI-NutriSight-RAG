@@ -10,6 +10,47 @@ from rag import (
 
 st.set_page_config(page_title="Nutri-Sight", layout="wide")
 
+# Custom CSS untuk UI improvements
+st.markdown(
+    """
+    <style>
+    /* Chat container dengan scroll */
+    .chat-container {
+        height: 500px;
+        overflow-y: auto;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        margin-bottom: 10px;
+    }
+    .chat-message {
+        margin: 10px 0;
+        padding: 12px;
+        border-radius: 10px;
+        max-width: 85%;
+    }
+    .user-message {
+        background-color: #e3f2fd;
+        margin-left: auto;
+        text-align: right;
+    }
+    .bot-message {
+        background-color: #ffffff;
+        margin-right: auto;
+        border: 1px solid #ddd;
+    }
+    .logo-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 10px;
+    }
+    </style>
+""",
+    unsafe_allow_html=True,
+)
+
 GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", "")
 
 # Cek apakah API Key sudah diatur
@@ -40,7 +81,12 @@ if "child_data" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-st.title("🍼 Nutri-Sight: Intervensi Gizi & Stunting")
+# Header dengan logo
+st.markdown('<div class="logo-header">', unsafe_allow_html=True)
+if os.path.exists("Nutri-Sight.png"):
+    st.image("Nutri-Sight.png", width=60)
+st.title("Nutri-Sight: Intervensi Gizi & Stunting")
+st.markdown("</div>", unsafe_allow_html=True)
 st.markdown("Sistem hibrida Machine Learning dan RAG Chatbot")
 
 # Sidebar untuk info dan kontrol
@@ -67,7 +113,7 @@ col1, col2 = st.columns([1, 1.5])
 
 # Kolom Input Data Anaak (Antropometri) + Prediksi ML
 with col1:
-    st.subheader("📊 Input Data Anak (Model ML)")
+    st.subheader(" Input Data Anak (Antropometri)")
 
     with st.form("input_form"):
         usia = st.number_input("Usia (Bulan)", min_value=0, max_value=60, value=12)
@@ -80,7 +126,7 @@ with col1:
         gender = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"])
 
         submit = st.form_submit_button(
-            "🔍 Prediksi Status Gizi", use_container_width=True
+            "Prediksi Status Gizi", use_container_width=True
         )
 
         if submit:
@@ -97,7 +143,11 @@ with col1:
                     }
                     st.success("✅ Prediksi Berhasil!")
 
-                    # Tampilkan hasil dengan styling yang lebih baik
+                    # Tampilkan logo di hasil prediksi
+                    if os.path.exists("Nutrisight.png"):
+                        st.image("Nutrisight.png", width=40)
+
+                    # Tampilkan hasil 
                     status_emoji = {
                         "Normal": "✅",
                         "Stunted": "⚠️",
@@ -141,16 +191,33 @@ with col1:
         st.write(f"**{emoji} Status:** {pred['status']}")
         st.write(f"**🎯 Confidence:** {pred['confidence']:.2%}")
 
-# KOLOM 2: CHATBOT
+# Chatbot
 with col2:
-    st.subheader("💬 Konsultasi Gizi (RAG Chatbot)")
+    st.subheader("Chatbot Intervensi Gizi & Stunting")
 
-    # Tampilkan chat history
+    # Container scrollable untuk chat
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+
+    # Tampilkan chat history dengan styling custom
     for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+        if message["role"] == "user":
+            st.markdown(
+                f'<div class="chat-message user-message"><b>Anda:</b><br>{message["content"]}</div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            # Tampilkan logo bot di response
+            logo_html = ""
+            if os.path.exists("Nutri-Sight.png"):
+                logo_html = '<img src="Nutri-Sight.png" width="30" style="vertical-align: middle; margin-right: 8px;">'
+            st.markdown(
+                f'<div class="chat-message bot-message">{logo_html}<b>Nutri-Sight:</b><br>{message["content"]}</div>',
+                unsafe_allow_html=True,
+            )
 
-    # Input chat
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Input chat (tetap di bawah, tidak ikut scroll)
     if prompt := st.chat_input(
         "Tanyakan tentang gizi, stunting, atau hasil prediksi..."
     ):
@@ -159,7 +226,7 @@ with col2:
             st.markdown(prompt)
 
         with st.chat_message("assistant"):
-            with st.spinner("🤔 Menganalisis..."):
+            with st.spinner("Thinking..."):
                 # Buat konteks dari hasil prediksi (jika ada)
                 if (
                     st.session_state.prediction_result
@@ -205,3 +272,8 @@ Berikan rekomendasi yang relevan dengan status gizi anak ini berdasarkan dokumen
                 st.markdown(response)
 
         st.session_state.messages.append({"role": "assistant", "content": response})
+        st.rerun()  # Refresh untuk update chat container
+def build_faiss_index(texts):
+    """Bangun FAISS index dari list teks"""
+    if not texts:
+        return None
