@@ -13,7 +13,7 @@ st.set_page_config(page_title="Nutri-Sight", layout="wide")
 GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", "")
 
 if not GROQ_API_KEY:
-    st.error("️ API Key Groq belum diatur.")
+    st.error("⚠️ API Key Groq belum diatur.")
     st.stop()
 
 
@@ -35,9 +35,16 @@ if "child_data" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Header
-st.title("Nutri-Sight: Intervensi Gizi & Stunting")
-st.markdown("Sistem hibrida Machine Learning dan RAG Chatbot")
+# Header dengan Logo
+col_logo, col_title = st.columns([0.1, 0.9])
+with col_logo:
+    if os.path.exists("Nutrisight.png"):
+        st.image("Nutrisight.png", width=60)
+with col_title:
+    st.title("Nutri-Sight: Intervensi Gizi & Stunting")
+    st.markdown("Sistem hibrida Machine Learning dan RAG Chatbot")
+
+st.markdown("---")
 
 with st.sidebar:
     st.header("Informasi Sistem")
@@ -46,11 +53,11 @@ with st.sidebar:
     st.write("**AI Model:** Llama 3.1 8B")
     st.write("**Knowledge Base:** 4 Guidebook")
     st.markdown("---")
-    if st.button("Reset Prediksi", use_container_width=True):
+    if st.button("🔄 Reset Prediksi", use_container_width=True):
         st.session_state.prediction_result = None
         st.session_state.child_data = None
         st.rerun()
-    if st.button("Clear Chat", use_container_width=True):
+    if st.button("🗑️ Clear Chat", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
 
@@ -83,11 +90,11 @@ with col1:
                         "tinggi": tinggi,
                         "gender": gender,
                     }
-                    st.success("Prediksi Berhasil!")
+                    st.success("✅ Prediksi Berhasil!")
 
                     status_emoji = {
                         "Normal": "✅",
-                        "Stunted": "️",
+                        "Stunted": "⚠️",
                         "Severely Stunted": "🚨",
                         "Tall": "📏",
                     }
@@ -127,14 +134,42 @@ with col2:
     st.subheader("Chatbot Intervensi Gizi & Stunting")
 
     # Chat container dengan scroll
-    chat_container = st.container(height=400, border=True)
+    chat_container = st.container(height=450, border=True)
 
     with chat_container:
-        for message in st.session_state.messages:
+        for i, message in enumerate(st.session_state.messages):
             if message["role"] == "user":
-                st.markdown(f"**Anda:** {message['content']}")
+                # User message 
+                st.markdown(
+                    f"""
+                    <div style="
+                        background-color: #1E3A5F;
+                        padding: 12px 16px;
+                        border-radius: 12px;
+                        margin: 10px 0;
+                        margin-left: 20%;
+                    ">
+                        {message['content']}
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
             else:
-                st.markdown(f"**Nutri-Sight:** {message['content']}")
+                # Bot message
+                st.markdown(
+                    f"""
+                    <div style="
+                        background-color: #262730;
+                        padding: 12px 16px;
+                        border-radius: 12px;
+                        margin: 10px 0;
+                        margin-right: 20%;
+                    ">
+                        {message['content']}
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
     # Input chat di luar container
     if prompt := st.chat_input(
