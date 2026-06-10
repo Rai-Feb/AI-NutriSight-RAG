@@ -1,0 +1,11 @@
+streamlit
+pandas
+numpy
+scikit-learn
+joblib
+matplotlib
+seaborn
+groq
+faiss-cpu
+sentence-transformers
+PyPDF2
