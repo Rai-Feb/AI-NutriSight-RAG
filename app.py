@@ -41,8 +41,10 @@ with col_logo:
     if os.path.exists("Nutrisight.png"):
         st.image("Nutrisight.png", width=60)
 with col_title:
-    st.title("Nutri-Sight: Intervensi Gizi & Stunting")
-    st.markdown("Sistem hibrida Machine Learning dan RAG Chatbot")
+    st.title("NutriSight")
+    st.markdown(
+        "Chatbot Intervensi Gizi Berbasis RAG dengan Sistem Hibrida Machine Learning untuk Klasifikasi Risiko Stunting"
+    )
 
 st.markdown("---")
 
@@ -51,7 +53,7 @@ with st.sidebar:
     st.write("**Model ML:** Random Forest")
     st.write("**Akurasi:** 87.66%")
     st.write("**AI Model:** Llama 3.1 8B")
-    st.write("**Knowledge Base:** 4 Guidebook")
+    st.write("**Knowledge Base:** 3 Guidebook")
     st.markdown("---")
     if st.button("🔄 Reset Prediksi", use_container_width=True):
         st.session_state.prediction_result = None
